@@ -1,0 +1,224 @@
+UTTERANCES,CORE RELATIONS
+what were et's revenues,movie.gross_revenue
+who directed grizzly man,movie.directed_by
+search for r rated movies,movie.rating
+show producers who work for miramax,movie.production_companies movie.produced_by
+search chick flicks,movie.genre
+revenue for pretty woman,movie.gross_revenue
+what rating did the dark knight rises receive,movie.rating
+country of le havre,movie.country
+please show me information on will ferrell,none
+movies with pg rating,movie.rating
+information for clark gable,none
+what character did will smith play in hitch,movie.starring.actor movie.starring.character
+about in july,none
+movies by george lucas,movie.directed_by
+show me a list of all movies that were directed by tom hanks,movie.directed_by
+what genre is calendar girls in,movie.genre
+which movies are rated r,movie.rating
+who played guido in life is beautiful,movie.starring.actor movie.starring.character
+cast and crew of hitch,movie.starring.actor
+what country is cell 21 from,movie.country
+what language did the characters speak in black swan,movie.language
+movie stuff for steven spielberg,movie.directed_by
+show me the director of forest gump,movie.directed_by
+tom cruise movies,movie.starring.actor
+can you tell me who is the director of batman,movie.directed_by
+show me spielberg's main page,none
+synopsis for finding nemo,none
+look up french movies,movie.country movie.language
+ticket sales for the movie avengers,movie.gross_revenue
+list of movies starring angelina jolie,movie.starring.actor
+will you please show me info on the movie the campaign,none
+what movies has tom cruise starred in,movie.starring.actor
+what types of movies does lionsgate produce,movie.production_companies movie.genre
+avatar realease date,movie.initial_release_date
+what films has robert redford directed,movie.directed_by
+hope this movie is in english,movie.language
+search for movies by language,movie.language
+director of the incredibles,movie.directed_by
+what is the name of the company that produced the movie inception,movie.production_companies
+movies and who directed them,movie.directed_by
+what was the budget for facing the giants,movie.estimated_budget
+see ed harris last movie,movie.starring.actor movie.initial_release_date
+look up movies with a g rating,movie.rating
+what is the calendar date release for looper,movie.initial_release_date
+which country made elizabeth,movie.country
+what was the last film robert redford produced,movie.initial_release_date movie.produced_by
+what movies have brad pitt produced,movie.produced_by
+what was the budget for the hobbit,movie.estimated_budget
+the godfather's budget,movie.estimated_budget
+show me all movies about diving,movie.subjects
+the campaign movie page,none
+do you have any pg thirteen rated movies,movie.rating
+what production company was responsible for the film the devil wears prada,movie.production_companies
+brad pitt movies,movie.starring.actor
+lion king characters,movie.starring.character
+send me movies that are in italian,movie.language
+show me life is beautiful information,none
+who starred in finding nemo,movie.starring.actor
+i want to see movies from france,movie.country
+movies from france,movie.country
+what new movies does lionsgate have out,movie.production_companies movie.initial_release_date
+find me more about finding nemo,none
+look up what language the chaser is in,movie.language
+search for movies produced by spike lee,movie.produced_by
+get me info about the movie house at the end of the street,none
+watch ron howard's latest movie,movie.directed_by movie.initial_release_date
+what are some movies that were produced in europe,movie.country
+can you tell me who produced the movie avatar,movie.produced_by
+movie list hitchcock,movie.directed_by
+what are the names of films produced by steven spielberg,movie.produced_by
+producer of avatar,movie.produced_by
+i d like to know who the producer of the terminator is,movie.produced_by
+can you find the movies with korean language,movie.language
+who was the actor in movie hum tum,movie.starring.actor
+show angelina jolie movies,movie.starring.actor
+i need to know more about the producer ray stark,none
+who was the lead in black swan,movie.starring.actor
+synopsis for in july,none
+look up the release date of resident evil,movie.initial_release_date
+i need to know names of some movies which have a rating of pg-13,movie.rating
+can i see more info the movie life is beautiful,none
+what type of movie is ted considered to be,movie.genre
+what movies has andrew stanton directed,movie.directed_by
+what is grease rated,movie.rating
+who was the tin man in wizard of oz,movie.starring.actor movie.starring.character
+movies about immigration,movie.subjects
+can you show me details about the movie star wars:episode four - a new hope,none
+what date was avatar released,movie.initial_release_date
+what genre is the movie in july,movie.genre
+show will ferrell information,none
+can you list movies in french,movie.language
+movies that have comedy,movie.genre
+who are the directors of gone with the wind,movie.directed_by
+language of hamlet,movie.language
+find japanese movies,movie.country movie.language
+i want to learn about charlie sheen,none
+find all new releases that are rated g,movie.rating movie.initial_release_date
+budget for titanic movie,movie.estimated_budget
+pretty girl what is the movie's genre,movie.genre
+show me the cast and crew for finding nemo,movie.starring.actor
+what movies are directed by ridley scott,movie.directed_by
+look for the budget of freedom writers,movie.estimated_budget
+has spike lee produced any films,movie.produced_by
+find russian movies,movie.country movie.language
+please list movies about war,movie.subjects
+show me star wars four page,none
+will smith bio,none
+show me all movies by charles vidor,movie.directed_by
+is it appropriate to take my 16 year old to see land of the lost,movie.rating
+all the movies of karan johar,movie.directed_by
+show me the rating for the movie romeo must die,movie.rating
+will ferrell films,movie.starring.actor
+what genre is pretty girl,movie.genre
+who directed a hard day's night,movie.directed_by
+movies in english,movie.language
+what s the language of moscow does not believe in tears,movie.language
+who directed gone with the wind,movie.directed_by
+movies directed by clint eastwood,movie.directed_by
+show me a list of movies directed by robert wise,movie.directed_by
+i want to find movies by director james cameron,movie.directed_by
+please select the option to search for g rated movies,movie.rating
+get movies from canada,movie.country
+movies from scotland,movie.country
+who produced top gun,movie.produced_by
+where can i find a director,none
+what is the rating for house at the end of the street,movie.rating
+when will paranormal activity be released,movie.initial_release_date
+get me spanish movies,movie.country movie.language
+i want to watch movies with tom hanks,movie.starring.actor
+i need to see some movies from warner brothers,movie.production_companies
+who is bruce willis,none
+what type of movie is this,movie.genre
+exhibit details of in july movie,none
+look for dramas made or shot in france,movie.country movie.genre
+show me movies that are in korean,movie.language
+show me movies from japan,movie.country
+dutch movie listing,movie.country movie.language
+get me information about spielberg,none
+find movies by release date,movie.initial_release_date
+search for horror movies,movie.genre
+show me the rating for the movie the lord of rings,movie.rating
+tell me about inception's director,movie.directed_by
+give me some names of japanese movies,movie.country movie.language
+watch james cameron movies,movie.directed_by
+show me the profile of spielberg,none
+find the director for pretty woman,movie.directed_by
+producer for slumdog millionaire,movie.produced_by
+take me to star wars four page,none
+han solo,movie.starring.character
+i want to see g -rated films now,movie.rating
+what is the director's name of lord of the rings,movie.directed_by
+who produced the godfather,movie.produced_by
+find movies directed by stephen spielberg,movie.directed_by
+show me information related to the film the campaign,none
+stephen spielberg biography,none
+find actors,none
+list the movies anna paquin has starred in,movie.starring.actor
+who are the actors in captain america,movie.starring.actor
+what films are not spoken in english,movie.language
+find spanish movies,movie.country movie.language
+show me movies that are in spanish,movie.language
+show me sarah polley movies,movie.starring.actor
+movie directors,none
+who produced the great debaters,movie.produced_by
+who made the movie field of dreams possible,movie.directed_by
+about house at the end of the street,none
+how do they speak in the movie the professional,movie.language
+show me a list of all warner bros. films,movie.production_companies
+find movies,none
+show me more details for the movie house at the end of the street,none
+see movies from india,movie.country
+what was the budget for the avengers,movie.estimated_budget
+is this movie a romance,movie.genre
+show me movies produced by julian fellows,movie.produced_by
+what foreign language is the movie belle available to view in,movie.language
+the silence of the lambs director,movie.directed_by
+please tell me who produce the avatar,movie.produced_by
+lion king filmed at,movie.country
+list of french language movies,movie.language
+what is resident evil's release date,movie.initial_release_date
+can you tell me which country does thoda pyaar thoda magic belongs to,movie.country
+can you locate movies produced by clint eastwood,movie.produced_by
+what is the language of the movie aankhen,movie.language
+who is kristen stewart,none
+show steven spielberg movies,movie.directed_by
+what's the rating for satyricon,movie.rating
+find me pg-13 movies,movie.rating
+director of the cabin in the woods,movie.directed_by
+show me the name of the country for the movie thoda pyaar thoda magic,movie.country
+who produced lion king,movie.produced_by
+show the cast of hitch,movie.starring.actor
+what is the name of the director of the movie avengers,movie.directed_by
+find movies in hindi,movie.language
+movies by steven spielberg,movie.directed_by
+information about movie,none
+what movies has spielberg been a producer on,movie.produced_by
+what is the rating for the movie the campaign,movie.rating
+rating for dark knight,movie.rating
+show me comedy movies,movie.genre
+find historical movies,movie.genre
+show me r rated movies,movie.rating
+i want to search for alfred hitchcock movies,movie.directed_by
+show me canadian movies,movie.country
+what are some current movies with horses as the main topic of the movie,movie.subjects
+what movies can young children watch,movie.rating
+which movies does gabrielle union come out in,movie.starring.actor
+are there any canadian movies,movie.country
+what is hindi,movie.language
+show me horror movie earnings,movie.gross_revenue movie.genre
+show me all r -rated movies,movie.rating
+i want to know the director of finding nemo,movie.directed_by
+what company produced the hangover,movie.production_companies
+show movies in french,movie.language
+who was the main actor in the exorcist,movie.starring.actor
+release date of snow white and the huntsman,movie.initial_release_date
+who is in barfi,movie.starring.actor
+what films has selena gomez been in,movie.starring.actor
+overview of house at the end of the street,none
+list all movies that walt disney produced,movie.production_companies
+who stars in in july,movie.starring.actor
+show me all the movies made by paramount,movie.production_companies
+i want to look up information about the movie hotel transylvania,none
+find the director of big,movie.directed_by

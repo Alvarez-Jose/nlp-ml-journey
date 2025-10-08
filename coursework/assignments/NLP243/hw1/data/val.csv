@@ -1,0 +1,223 @@
+UTTERANCES,CORE RELATIONS
+find for information about the cast of appolo thirteen,movie.starring.actor
+who plays nemo in finding nemo,movie.starring.actor movie.starring.character
+show me more information about the producer ray stark,none
+get a list of animated films,movie.genre
+who stars on the house at the end of the street,movie.starring.actor
+show me all the movies made by universal,movie.production_companies
+who starred in hitch,movie.starring.actor
+who produced the movie gone with the wind,movie.produced_by
+show me all movies kristen stewart has been in,movie.starring.actor
+all videos of will ferrell,movie.starring.actor
+find john cusack movies,movie.starring.actor
+i want chinese language movies,movie.language
+language of the film revanche,movie.language
+what is the release date of heroine,movie.initial_release_date
+show me zombie movies,movie.subjects
+show me the rating of the movie avatar,movie.rating
+show me a list of movies that christian bale has starred in during his career,movie.starring.actor
+finding nemo info,none
+show me the comedy pitch perfect,movie.genre
+i want to view only movies with tom hanks,movie.starring.actor
+when will the movie gone with the wind be released,movie.initial_release_date
+search for the producer of mirror,movie.produced_by
+how is the movie classified,movie.genre
+show me movies with a rating of r,movie.rating
+rocky director,movie.directed_by
+how many films did alfred hitchcock direct,movie.directed_by
+where was footnote made,movie.country
+list the actors in forager,movie.starring.actor
+who is steven spielberg,none
+list spanish movies,movie.country movie.language
+english movie list,movie.country movie.language
+what is terry georges background,none
+who produced the movie hotel rwanda,movie.produced_by
+i want to look up the budget of freedom writers,movie.estimated_budget
+who directed batman,movie.directed_by
+show me the movies directed by steven spielberg,movie.directed_by
+who stars in vulgaria,movie.starring.actor
+angelina jolie's latest movie,movie.starring.actor movie.initial_release_date
+what movies and upcoming movies will christian bale star in,movie.starring.actor
+show me a list of scary movies,movie.genre
+which movies has angelina jolie been in,movie.starring.actor
+when was the release date for the movie resident evil,movie.initial_release_date
+i want to watch movies from germany,movie.country
+play list g,movie.rating
+find release date for karate kid,movie.initial_release_date
+show me some movies that are related to time travel,movie.subjects
+looper directors,movie.directed_by
+what movies did stephen king direct,movie.directed_by
+look up information about tom cruise,none
+list of all french speaking films,movie.language
+what has andrew stanton directed,movie.directed_by
+what actors appeared in the movie hitch,movie.starring.actor
+find the director of mask,movie.directed_by
+i need to know the name of the country to which the movie kati patang belongs to,movie.country
+find movies directed by niel abramson,movie.directed_by
+movie made by dreamworks,movie.production_companies
+show recent films starring bruce willis,movie.starring.actor movie.initial_release_date
+list some funny russian movies,movie.country movie.language movie.genre
+i want to see movies directed by michael bay,movie.directed_by
+show me movies in japanese,movie.language
+what was the budget for the movie avatar,movie.estimated_budget
+the camp out,none
+what kind of movie,movie.genre
+what movies has christian bale acted in,movie.starring.actor
+listing of g movies,movie.rating
+i want information about will ferrell,none
+can you show me names of some indian romantic movies,movie.country movie.language movie.genre
+can you show me movies starring denzel washington please,movie.starring.actor
+i am looking for movies in spanish,movie.language
+show me star wars four,none
+i want to watch a drama made in china,movie.country movie.genre
+show me british films,movie.country
+are there movies not rated g,movie.rating
+are there any movies with skating on ice,movie.subjects
+i would like to view any movies made in france,movie.country
+list of movies produced by searchlight films,movie.production_companies
+what is the cast in resident evil retribution,movie.starring.actor
+show me chinese movies,movie.country movie.language
+give me a list of romance movies,movie.genre
+find me movies by jj abrams,movie.directed_by
+sergio leone,none
+find movies of kareena,movie.starring.actor
+i want to search for pg rated movies,movie.rating
+how much money was spent on batman,movie.estimated_budget
+stephen spielberg movies,movie.directed_by
+please find movies directed by stephen spielberg,movie.directed_by
+what movies has clive owen starred in,movie.starring.actor
+show me will ferrell information,none
+who was the star in hitch,movie.starring.actor
+find french films,movie.country movie.language
+what ron howard movies are rated pg-13,movie.rating movie.directed_by
+looking for a musical movie,movie.genre
+what movies discuss time travel,movie.subjects
+what movies were filmed in france,movie.country
+how many films has taye diggs been in,movie.starring.actor
+show me a movie that starred patrick swayze,movie.starring.actor
+did robert wise direct any other musical films,movie.directed_by movie.genre
+the campaign,none
+i would like to search for what country cell 21 is from,movie.country
+what language is black swan,movie.language
+when did resident evil come out,movie.initial_release_date
+portugese movies,movie.country movie.language
+what movies has clive owen been in,movie.starring.actor
+i need a list of tom hanks movies,movie.starring.actor
+find movies from new zealand,movie.country
+what genre is superman,movie.genre
+how do i find out information about kristen stewart,none
+find movies with r ratings,movie.rating
+castmembers of apollo thirteen,movie.starring.actor
+find out what kind of movie grease is,movie.genre
+i need to know who directed black swan,movie.directed_by
+show me g rated movies,movie.rating
+sort in all diving movies,movie.subjects
+look up movies about god,movie.subjects
+what movies did clint eastwood direct and star in,movie.starring.actor movie.directed_by
+find movies directed by todd solondz,movie.directed_by
+show me recent movies from lionsgate,movie.production_companies movie.initial_release_date
+list all the movies john travolta has done,movie.starring.actor
+what is jurassic park rated,movie.rating
+what language is the professional in,movie.language
+display overview of the movie house at the end of the street,none
+movies will ferrell played in,movie.starring.actor
+show me japanese movies,movie.country movie.language
+who starred in captain america,movie.starring.actor
+budget request for my big fat greek wedding,movie.estimated_budget
+language of anna karinia,movie.language
+will ferrell movies,movie.starring.actor
+show me all movies produced by ray stark,movie.produced_by
+bings movie page finding nemo,none
+what movies has ray stark produced,movie.produced_by
+what is the movie rating for die hard,movie.rating
+who is the producer of avatar,movie.produced_by
+cast and crew for apollo thirteen,movie.starring.actor
+are there any movies made in spain,movie.country
+steven spielberg profile page,none
+who played esme in twilight,movie.starring.actor movie.starring.character
+i want to see a film in japanese,movie.language
+can you give me names of some movies having pg thirteen rating,movie.rating
+i want to see movies made in america,movie.country
+steven spielberg bio,none
+what movies have come out of turkey,movie.country
+search for the budget of step up,movie.estimated_budget
+i need to know which country does the movie thoda pyaar thoda magic belongs to,movie.country
+is there a list of movies about chess,movie.subjects
+show me finding nemo's page,none
+show me movies about time travel,movie.subjects
+i want to find movies rated r,movie.rating
+i am interested in who directed cabin in the woods,movie.directed_by
+what is the parental rating on this movie,movie.rating
+show me hungarian comedies,movie.country movie.language movie.genre
+is hotel transylavania good for adults,movie.rating
+look for kareena's movies,movie.starring.actor
+i hope this movie would be in english,movie.language
+what are all of the movies that john singleton has directed,movie.directed_by
+find movies produced by lucas films,movie.production_companies
+i want information about angelina jolie,none
+i want to see info on the movie the campaign,none
+was what tom cruise's first movie,movie.starring.actor movie.initial_release_date
+a movie based on time travel,movie.subjects
+who produced avatar with james cameron,movie.produced_by
+find director movies,movie.directed_by
+films produced by laurie macdonald,movie.produced_by
+who is the producer of the terminator,movie.produced_by
+show me funny movies,movie.genre
+give me a list of some movies that have pg-13 rating,movie.rating
+looking for a drama movie,movie.genre
+i want an r rated movie,movie.rating
+show me all movies tom cruise has been in,movie.starring.actor
+what movies are spoken in another language,movie.language
+what new movies are playing with rating of pg thirteen,movie.rating movie.initial_release_date
+show me mexican films,movie.country
+find movies by twentieth century fox,movie.production_companies
+run a search for finding nemo for me please,none
+provide the cost for producing the deer hunter,movie.estimated_budget
+find films,none
+will ferrell history,none
+what year was the campaign released,movie.initial_release_date
+rating of movie,movie.rating
+find some musical movies,movie.genre
+when was avatar released,movie.initial_release_date
+who directed dirty dancing,movie.directed_by
+who directed the movie opening night,movie.directed_by
+i would like to know the names of all the movies which have george clooney in them,movie.starring.actor
+cast and crew of life is beautiful,movie.starring.actor
+bette midler movies,movie.starring.actor
+who produced the movie cars,movie.produced_by
+look for spanish movies,movie.country movie.language
+list movies with angelina jolie in them,movie.starring.actor
+give me more facts about the cast and crew of the movie apollo thirteen,movie.starring.actor
+show me movies in greek,movie.language
+show cast and crew for the movie life is beautiful,movie.starring.actor
+hitchcock movie info,movie.directed_by
+i am interested in watching a movie in polish,movie.language
+show me more details for the movie in july,none
+find movies only g,movie.rating
+show me the rating for the movie the mechanic,movie.rating
+how much did it cost to make avatar,movie.estimated_budget
+what was the highest making movie,movie.gross_revenue gr.amount
+are there any movies that are rated r,movie.rating
+who was in now,movie.starring.actor
+look for movies in french,movie.language
+find producer of the great debaters,movie.produced_by
+show brad pitt movies,movie.starring.actor
+i want to find zombie movies,movie.subjects
+show me the movies that james cameron has produced,movie.produced_by
+how old is steven spielberg,person.date_of_birth
+who played nick fury in the avengers,movie.starring.actor movie.starring.character
+who produced titanic,movie.produced_by
+bring up all pg movies,movie.rating
+director,none
+find me the film in july,none
+how many movies has lionsgate done,movie.production_companies
+info hitch producer,movie.produced_by
+who produced casino royale,movie.produced_by
+i want to view movies that are rated r,movie.rating
+roll credits for top gun,movie.starring.actor
+find a pg-13 movie,movie.rating
+find a movie,none
+when did dredd come out,movie.initial_release_date
+i am interested in the genre for 1000 words,movie.genre
+julian fellows productions,movie.produced_by
+when was in july released,movie.initial_release_date

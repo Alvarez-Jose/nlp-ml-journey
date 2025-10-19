@@ -9,30 +9,29 @@ and any other necessary components.
 import torch
 from torch import nn
 
-
-# defines the exact same model architecture
 class BoWClassifier(nn.Module):
     def __init__(self, input_size, num_labels):
         super().__init__()
         self.num_labels = num_labels
+        # Hidden MLP head for capacity
+        self.ff1 = nn.Linear(input_size, 256) # hidden layer - adjust addcordingly 
+        self.ff2 = nn.Linear(256, num_labels)
+        # can keep ff3 - choose to comment it out. could be useful 
+        #self.ff3 = nn.Linear(input_size, num_labels)
+        self.relu = nn.ReLU()
+        self.dropout = nn.Dropout(0.3)
 
-    
     def forward(self, x):
-        return torch.zeros((x.shape[0], self.num_labels), device=x.device)
+        x = self.ff1(x)
+        x = self.relu(x)
+        x = self.dropout(x)
+        x = self.ff2(x)
+        return x
+        
     
     
-def get_best_model(self, input_size, num_labels):
+def get_best_model(input_size, num_labels):
     # return a newly instantiated model that your best weights will be loaded into
-
-    # Define the path to your saved state dictionary
-    weights_path = 'best_model.pt'
-
-    # Load the saved state dictionary
-    state_dict = torch.load(weights_path)
-
-    # Load the weights into the newly instanitated model
-    get_best_model.load_state_dict(state_dict)
-    get_best_model.eval()
     # the model returned by this function must exactly match the architecture that the saved weights expect
     return BoWClassifier(input_size=input_size, num_labels=num_labels)
 
@@ -44,14 +43,6 @@ def predict(model_output):
     Returns:
         predictions: Tensor of predicted class labels
     """
-    if model_output() < 0 or model_output.max() > 1:
-        probabilites = torch.sigmoid(model_output)
-    else:
-        probabilites = model_output
-
-    model_output = (probabilites >= model_output).init()
-    
-
-
-    return model_output > 0
+    # Slightly relaxed threshold helps recall for rare labels
+    return (torch.sigmoid(model_output) >= 0.30).int()
 

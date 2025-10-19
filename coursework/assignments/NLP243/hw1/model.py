@@ -13,10 +13,21 @@ class BoWClassifier(nn.Module):
     def __init__(self, input_size, num_labels):
         super().__init__()
         self.num_labels = num_labels
+        # Hidden MLP head for capacity
+        self.ff1 = nn.Linear(input_size, 256) # hidden layer - adjust addcordingly 
+        self.ff2 = nn.Linear(256, num_labels)
+        # can keep ff3 - choose to comment it out. could be useful 
+        #self.ff3 = nn.Linear(input_size, num_labels)
+        self.relu = nn.ReLU()
+        self.dropout = nn.Dropout(0.3)
 
-    
     def forward(self, x):
-        return torch.zeros((x.shape[0], self.num_labels), device=x.device)
+        x = self.ff1(x)
+        x = self.relu(x)
+        x = self.dropout(x)
+        x = self.ff2(x)
+        return x
+        
     
     
 def get_best_model(input_size, num_labels):
@@ -32,5 +43,6 @@ def predict(model_output):
     Returns:
         predictions: Tensor of predicted class labels
     """
-    return model_output > 0
+    # Slightly relaxed threshold helps recall for rare labels
+    return (torch.sigmoid(model_output) >= 0.30).int()
 

@@ -1,6 +1,6 @@
 from transformers import GPT2Tokenizer, DataCollatorWithPadding
-from datasets import Dataset
-from torch.utils.data import DataLoader
+from datasets import Dataset as HFDataset
+from torch.utils.data import Dataset as TorchDataset, DataLoader
 from abc import ABC, abstractmethod
 
 def get_data(split):
@@ -22,6 +22,18 @@ class TokenizedData(ABC):
     @abstractmethod
     def dataloaders(self):
         raise NotImplementedError()
+
+class TorchHFAdapter(TorchDataset):
+    def __init__(self, ds: HFDataset):
+        self.ds = ds
+    def __len__(self):
+        return len(self.ds)
+    def __getitem__(self, idx):
+        item = self.ds[idx]
+        return {
+            "input_ids": item["input_ids"],
+            "attention_mask": item["attention_mask"],
+        }
 
 class GPTTokenizedData(TokenizedData):
     def __init__(self, batch_size=64):
@@ -51,11 +63,8 @@ class GPTTokenizedData(TokenizedData):
             result = {'input_ids': [], 'attention_mask': []}
 
             for sent in samples:
-                # using this tokenization the longest sample is 143 tokens
                 tokens = tokenizer.encode(sent, truncation=True, max_length=150)
-
                 tokens_with_eos = [tokenizer.eos_token_id] + tokens + [tokenizer.eos_token_id]
-
                 result['input_ids'].append(tokens_with_eos)
                 result['attention_mask'].append([1] * len(tokens_with_eos))
 
@@ -64,13 +73,14 @@ class GPTTokenizedData(TokenizedData):
         self._dataloaders = {}
         for split in ['train', 'test', 'val']:
             data = get_data(split)
-            
             encoded_input = tokenize_with_eos(data, self.tokenizer)
-            tokenized_dataset = Dataset.from_dict(encoded_input)
+            hf_ds = HFDataset.from_dict(encoded_input)
             data_collator = DataCollatorWithPadding(tokenizer=self.tokenizer)
-            
             self._dataloaders[split] = DataLoader(
-                tokenized_dataset,
+                TorchHFAdapter(hf_ds),
                 batch_size=self.batch_size,
                 collate_fn=data_collator,
+                pin_memory=True,
+                num_workers=0,
+                persistent_workers=False
             )

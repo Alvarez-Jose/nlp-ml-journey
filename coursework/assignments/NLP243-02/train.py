@@ -2,6 +2,7 @@ import torch
 from torch import nn, Tensor
 from torch.optim import Adam
 import math
+from torch.cuda.amp import autocast, GradScaler
 
 def build_shifted_ll(input_ids: Tensor):
     S = input_ids.size(1)
@@ -24,9 +25,17 @@ def compute_loss_from_logits(logits, labels, pad_token_id):
     )
     return loss
 
+def _is_cuda_device(device):
+    # Works whether you pass "cuda" or torch.device("cuda")
+    return (isinstance(device, str) and device == "cuda") or (
+        isinstance(device, torch.device) and device.type == "cuda"
+    )
+
 def train_model(model, train_loader, valid_loader, pad_token_id, num_epochs, device, save_path='best_model.pt'):
     model = model.to(device)
     optimizer = Adam(model.parameters(), lr=3e-4)
+    use_cuda = _is_cuda_device(device)
+    scaler = GradScaler(enabled=use_cuda)
     loss_fn = nn.CrossEntropyLoss(ignore_index=pad_token_id)
 
     best_val_loss = float("inf")
@@ -34,31 +43,33 @@ def train_model(model, train_loader, valid_loader, pad_token_id, num_epochs, dev
     for epoch in range(num_epochs):
         model.train()
         total_loss, total_tokens = 0.0, 0
+        
 
         for batch in train_loader:
-            input_ids = batch["input_ids"].to(device)
-            attention_mask = batch["attention_mask"].to(device)
-
+            input_ids = batch["input_ids"].to(device, non_blocking=True)
+            attention_mask = batch["attention_mask"].to(device, non_blocking=True)
+            labels = batch.get("labels", input_ids).to(device, non_blocking=True)
+            
+            optimizer.zero_grad(set_to_none=True)
+            
             # shifting for next token prediction
             inputs = input_ids[:, :-1]
             labels = input_ids[:, 1:]
             mask = attention_mask[:, :-1]      
 
-            optimizer.zero_grad()
-
             # forward pass
-            logits = model(inputs, attention_mask=mask)
-
-            # gather the loss
-            loss = loss_fn(
-                logits.reshape(-1, logits.size(-1)),
-                labels.reshape(-1)
-            )
-
-            # Backpropagation
-            loss.backward()
+            with autocast(enabled=use_cuda):
+                logits = model(inputs, attention_mask=mask)
+                # gather the loss
+                loss = loss_fn(
+                    logits.reshape(-1, logits.size(-1)),
+                    labels.reshape(-1)
+                )
+                
+            scaler.scale(loss).backward()
             torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
-            optimizer.step()
+            scaler.step(optimizer)
+            scaler.update()
 
             # Tracking the token-weighted average
             label_mask = attention_mask[:, 1:]

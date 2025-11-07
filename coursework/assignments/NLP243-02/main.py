@@ -18,6 +18,7 @@ def main():
     model = get_best_model_definition(vocab_size)
     
     device = "cuda" if torch.cuda.is_available() else "cpu"
+    model = get_best_model_definition(vocab_size).to(device)
     pad_token_id = tokenized.tokenizer.pad_token_id
     train_model(
         model=model,

@@ -6,7 +6,7 @@ from torch import nn
 import math
 import argparse
 
-def perplexity(model, dataloader):
+def evaluate_perplexity(model, dataloader):
     model.eval()
     device = get_model_device(model)
     
@@ -67,7 +67,7 @@ def main():
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     model.to(device)
 
-    ppl, loss = perplexity(model, dataloaders['test'])
+    ppl, loss = evaluate_perplexity(model, dataloaders['test'])
 
     print(f"Perplexity: {ppl}, Total loss: {loss}")
 

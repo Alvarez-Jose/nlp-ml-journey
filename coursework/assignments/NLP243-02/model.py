@@ -1,6 +1,7 @@
 from torch import nn
 import torch
 import math
+from typing import Optional
 
 class SinusoidalPositions(nn.Module):
     def __init__(self, max_seq_len, d_model, dropout: float = 0.1):
@@ -33,7 +34,7 @@ class SinusoidalPositions(nn.Module):
 
 
 class TokenEmbedding(nn.Module):
-    def __init__(self, vocab_size: int, d_model: int, padding_idx: int =None, scale: bool = True):
+    def __init__(self, vocab_size: int, d_model: int, padding_idx: Optional[int] = None, scale: bool = True):
         super().__init__()
         # Instantiate the internal nn.Embedding
         self.embedding = nn.Embedding(num_embeddings=vocab_size, embedding_dim=d_model,padding_idx=padding_idx)
@@ -45,7 +46,7 @@ class TokenEmbedding(nn.Module):
         return self.embedding(input_ids) * self.scale
     
 class EmbeddingwithPositions(nn.Module):
-    def __init__(self, vocab_size: int, d_model: int, max_seq_len: int, padding_idx: int = None, emb_dropout: float = 0.1, scale_tokens: bool = True):
+    def __init__(self, vocab_size: int, d_model: int, max_seq_len: int, padding_idx: Optional[int] = None, emb_dropout: float = 0.1, scale_tokens: bool = True):
         super().__init__()
         self.tok = TokenEmbedding(vocab_size, d_model, padding_idx=padding_idx, scale=scale_tokens)
         self.pos = SinusoidalPositions(max_seq_len=max_seq_len, d_model=d_model, dropout=emb_dropout)
@@ -54,6 +55,25 @@ class EmbeddingwithPositions(nn.Module):
         x = self.tok(input_ids)
         x = self.pos(x)
         return x
+    
+class babyEmbedLM(nn.Module):
+    def __init__(self, vocab_size, d_model=256, max_seq_len=512, padding_idx=None, emb_dropout=0.1):
+        super().__init__()
+        self.embed = EmbeddingwithPositions(
+            vocab_size=vocab_size,
+            d_model=d_model,
+            max_seq_len=max_seq_len,
+            padding_idx=padding_idx,
+            emb_dropout=emb_dropout,
+            scale_tokens=True,
+        )
+        self.lm_head = nn.Linear(d_model, vocab_size, bias=False)
+        
+    def forward(self, input_ids: torch.Tensor, attention_mask: Optional[torch.Tensor] = None):
+        _ = attention_mask
+        x = self.embed(input_ids)   # (B, S, D)
+        logits = self.lm_head(x)    # (B, S, V)
+        return logits
 
 
 
@@ -61,18 +81,17 @@ def get_best_model_definition(
         vocab_size: int, 
         d_model: int = 256, 
         max_seq_len: int = 512, 
-        padding_idx: int = None, 
+        padding_idx: Optional[int] = None, 
         emb_dropout: float = 0.1,
 ) -> nn.Module:
     """
     This is the model that will be used in the evaluation script
     Ensure it matches the .pt file provided there
     """
-    return EmbeddingwithPositions(
+    return babyEmbedLM(
         vocab_size=vocab_size,
-        d_model=d_model, 
+        d_model=d_model,
         max_seq_len=max_seq_len,
         padding_idx=padding_idx,
         emb_dropout=emb_dropout,
-        scale_tokens=True
     )

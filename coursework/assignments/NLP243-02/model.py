@@ -1,14 +1,12 @@
 from torch import nn
 import torch
 import math
-from datasets import load_dataset
-from transformers import AutoTokenizer, AutoModelForCausalLM, TrainingArguments, Trainer
-
 
 class SinusoidalPositions(nn.Module):
-    def __init__(self, max_seq_len, d_model):
+    def __init__(self, max_seq_len, d_model, dropout: float = 0.1):
         super().__init__()
-        
+        assert d_model % 2 == 0
+
         position = torch.arange(max_seq_len).unsqueeze(-1) # S, 1
         # inside sine / cosine we have pos * (10_000**-2m/d)
         # for stability, calculate instead exp(-2m/d * log(10_000))
@@ -20,51 +18,61 @@ class SinusoidalPositions(nn.Module):
         pe[:, 1::2] = torch.cos(position * multiplier)
 
         self.register_buffer('pe', pe)
+        self.dropout = nn.Dropout(p=dropout)
+        self.max_seq_len = max_seq_len
 
-    def forward(self, x):
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
         # x has shape B, S, D
         batch_seq_len = x.shape[1]
-        return x + self.pe[:batch_seq_len, :]
+        assert batch_seq_len <= self.max_seq_len, f"batch_seq_len {batch_seq_len} > max_seq_len {self.max_seq_len}"
+        pe = self.pe[:batch_seq_len, :].to(device=x.device, dtype=x.dtype)
+        # broadcast over batch
+        x = x + pe.unsqueeze(0)
+        
+        return self.dropout(x)
+
+
+class TokenEmbedding(nn.Module):
+    def __init__(self, vocab_size: int, d_model: int, padding_idx: int =None, scale: bool = True):
+        super().__init__()
+        # Instantiate the internal nn.Embedding
+        self.embedding = nn.Embedding(num_embeddings=vocab_size, embedding_dim=d_model,padding_idx=padding_idx)
+        self.scale = math.sqrt(d_model) if scale else 1.0
+
+    def forward(self, input_ids: torch.Tensor) -> torch.Tensor:
+        # input_ids: (B, S)
+        # output: (B, S, D)
+        return self.embedding(input_ids) * self.scale
     
-    model_name = "gpt2" # decoder only model
-    tokeinzer = AutoTokenizer.from_pretrained(model_name)
-    tokeinzer.pad_token = tokeinzer.eos_token # ensure pad token is defoned
-    model = AutoModelForCausalLM.form_pretrained(model_name)
-    #loading the dataset
-    dataset = load_dataset('data/train')
+class EmbeddingwithPositions(nn.Module):
+    def __init__(self, vocab_size: int, d_model: int, max_seq_len: int, padding_idx: int = None, emb_dropout: float = 0.1, scale_tokens: bool = True):
+        super().__init__()
+        self.tok = TokenEmbedding(vocab_size, d_model, padding_idx=padding_idx, scale=scale_tokens)
+        self.pos = SinusoidalPositions(max_seq_len=max_seq_len, d_model=d_model, dropout=emb_dropout)
 
-    # Begin Tokenize
-    '''def tokenize_fn(ex)'''
-
-"""
-TODO define your transformer model here. 
-this will include: 
-    - embed tokens (nn.Embedding)
-    - add position encoding (provided)
-    - n repetitions of 
-        - *masked* self attention (can be single or multi-headed)
-        - feedforward (MLP)
-        - remember that the layer outputs are added to a residual connection
-    - final linear layer with out_features equal to your vocabulary size
-"""
-def generate_square_subsequent_mask(size: int):
-    '''
-    function creates a sqaure, uppter - triangular mask typically filed float('-inf-)
-    in the upper triangle and 0.0 in the lower triangle (or True and False for boolean mask)
-    '''
-    mask = (torch.triu(torch.ones(size, size)) == 1).transpose(0,1)
-    mask = mask.float().masked_fill(mask == 0, float('-inf')).masked_fill(mask == 1, float(0.0))
-    return mask
+    def forward(self, input_ids: torch.Tensor) -> torch.Tensor:
+        x = self.tok(input_ids)
+        x = self.pos(x)
+        return x
 
 
 
-
-
-
-def get_best_model_definition(vocab_size):
+def get_best_model_definition(
+        vocab_size: int, 
+        d_model: int = 256, 
+        max_seq_len: int = 512, 
+        padding_idx: int = None, 
+        emb_dropout: float = 0.1,
+) -> nn.Module:
     """
     This is the model that will be used in the evaluation script
     Ensure it matches the .pt file provided there
     """
-    return
-
+    return EmbeddingwithPositions(
+        vocab_size=vocab_size,
+        d_model=d_model, 
+        max_seq_len=max_seq_len,
+        padding_idx=padding_idx,
+        emb_dropout=emb_dropout,
+        scale_tokens=True
+    )

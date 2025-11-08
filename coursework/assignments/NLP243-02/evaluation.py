@@ -9,36 +9,32 @@ import argparse
 def evaluate_perplexity(model, dataloader):
     model.eval()
     device = get_model_device(model)
-    
-    loss_fn = nn.CrossEntropyLoss(reduction='sum', ignore_index=-100)
+    IGNORE = -100
+    loss_fn_sum = nn.CrossEntropyLoss(reduction='sum', ignore_index=IGNORE)
 
-    total_loss = 0.
-    total_tokens = 0
-
+    total_loss, total_tokens = 0.0, 0
     with torch.no_grad():
         for batch in dataloader:
             input_ids = batch['input_ids'].to(device)
-            targets = input_ids[:, 1:]
-            inputs = input_ids[:, :-1]
+            attn = batch['attention_mask'].to(device)
 
-            padding_mask = batch['attention_mask'].to(device)
-            target_padding_mask = padding_mask[:, 1:]
-            input_padding_mask = padding_mask[:, :-1]
-            
-            # replace targets with -100 where it's padding
-            targets = targets.masked_fill(target_padding_mask==0, -100).view(-1)
-            
-            logits = model(inputs, input_padding_mask)
+            inputs = input_ids[:, :-1]
+            targets = input_ids[:, 1:]
+            tgt_mask = attn[:, 1:]
+
+            targets = targets.masked_fill(tgt_mask == 0, IGNORE)
+
+            logits = model(inputs, attn[:, :-1])
             B, S, V = logits.shape
             logits = logits.view(-1, V)
+            targets = targets.view(-1)
 
-            total_loss += loss_fn(logits, targets).item() 
+            total_loss   += loss_fn_sum(logits, targets).item()
+            total_tokens += (targets != IGNORE).sum().item()
 
-            total_tokens += target_padding_mask.sum().item() 
-    
-    perplexity = math.exp(total_loss / total_tokens)
+    avg_loss = total_loss / max(total_tokens, 1)
+    return math.exp(avg_loss), total_loss
 
-    return perplexity, total_loss
 
 
 def parse_arguments():

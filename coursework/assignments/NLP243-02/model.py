@@ -71,8 +71,8 @@ class babyEmbedLM(nn.Module):
         
     def forward(self, input_ids: torch.Tensor, attention_mask: Optional[torch.Tensor] = None):
         _ = attention_mask
-        x = self.embed(input_ids)   # (B, S, D)
-        logits = self.lm_head(x)    # (B, S, V)
+        x = self.embed(input_ids) # (B, S, D)
+        logits = self.lm_head(x) # (B, S, V)
         return logits
 
 

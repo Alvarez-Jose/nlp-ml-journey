@@ -2,64 +2,70 @@ from torch import nn
 import torch
 import math
 from typing import Optional
+from torch import nn
+import torch, math
+from typing import Optional
 
 class SinusoidalPositions(nn.Module):
-    def __init__(self, max_seq_len, d_model, dropout: float = 0.1):
+    def __init__(self, max_seq_len: int, d_model: int, dropout: float = 0.1):
         super().__init__()
         assert d_model % 2 == 0
-
-        position = torch.arange(max_seq_len).unsqueeze(-1) # S, 1
-        # inside sine / cosine we have pos * (10_000**-2m/d)
-        # for stability, calculate instead exp(-2m/d * log(10_000))
-        # multiplier shape D/2, then S, 1 * D/2 -> S, D/2
-        multiplier = torch.exp((torch.arange(0, d_model, 2) / d_model) * -math.log(10_000))
-
+        # (S,1)
+        pos = torch.arange(max_seq_len).unsqueeze(1)
+        # (D/2,)
+        div = torch.exp(torch.arange(0, d_model, 2) * (-math.log(10_000.0) / d_model)) 
         pe = torch.zeros(max_seq_len, d_model)
-        pe[:, 0::2] = torch.sin(position * multiplier) # S, D/2
-        pe[:, 1::2] = torch.cos(position * multiplier)
-
-        self.register_buffer('pe', pe)
-        self.dropout = nn.Dropout(p=dropout)
+        pe[:, 0::2] = torch.sin(pos * div)
+        pe[:, 1::2] = torch.cos(pos * div)
+        self.register_buffer("pe", pe)  # (S,D)
+        self.dropout = nn.Dropout(dropout)
         self.max_seq_len = max_seq_len
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        # x has shape B, S, D
-        batch_seq_len = x.shape[1]
-        assert batch_seq_len <= self.max_seq_len, f"batch_seq_len {batch_seq_len} > max_seq_len {self.max_seq_len}"
-        pe = self.pe[:batch_seq_len, :].to(device=x.device, dtype=x.dtype)
-        # broadcast over batch
-        x = x + pe.unsqueeze(0)
-        
-        return self.dropout(x)
-
+        S = x.size(1)
+        if S > self.max_seq_len:
+            raise ValueError(f"seq len {S} > max_seq_len {self.max_seq_len}")
+        return self.dropout(x + self.pe[:S].to(x.device, x.dtype))
 
 class TokenEmbedding(nn.Module):
     def __init__(self, vocab_size: int, d_model: int, padding_idx: Optional[int] = None, scale: bool = True):
         super().__init__()
-        # Instantiate the internal nn.Embedding
-        self.embedding = nn.Embedding(num_embeddings=vocab_size, embedding_dim=d_model,padding_idx=padding_idx)
+        self.embedding = nn.Embedding(vocab_size, d_model, padding_idx=padding_idx)
         self.scale = math.sqrt(d_model) if scale else 1.0
 
     def forward(self, input_ids: torch.Tensor) -> torch.Tensor:
-        # input_ids: (B, S)
-        # output: (B, S, D)
         return self.embedding(input_ids) * self.scale
-    
-class EmbeddingwithPositions(nn.Module):
-    def __init__(self, vocab_size: int, d_model: int, max_seq_len: int, padding_idx: Optional[int] = None, emb_dropout: float = 0.1, scale_tokens: bool = True):
+
+class EmbeddingWithPositions(nn.Module):
+    def __init__(
+        self,
+        vocab_size: int,
+        d_model: int,
+        max_seq_len: int,
+        padding_idx: Optional[int] = None,
+        emb_dropout: float = 0.1,
+        scale_tokens: bool = True,
+    ):
         super().__init__()
         self.tok = TokenEmbedding(vocab_size, d_model, padding_idx=padding_idx, scale=scale_tokens)
-        self.pos = SinusoidalPositions(max_seq_len=max_seq_len, d_model=d_model, dropout=emb_dropout)
+        self.pos = SinusoidalPositions(max_seq_len, d_model, dropout=emb_dropout)
 
     def forward(self, input_ids: torch.Tensor) -> torch.Tensor:
-        x = self.tok(input_ids)
-        x = self.pos(x)
-        return x
-    
-class babyEmbedLM(nn.Module):
-    def __init__(self, vocab_size, d_model=256, max_seq_len=512, padding_idx=None, emb_dropout=0.1):
+        return self.pos(self.tok(input_ids))
+
+class TinyTransformerLM(nn.Module):
+    def __init__(
+        self,
+        vocab_size: int,
+        d_model: int = 384,
+        max_seq_len: int = 512,
+        n_layer: int = 4,
+        n_head: int = 6,
+        padding_idx: Optional[int] = None,
+        emb_dropout: float = 0.1,
+    ):
         super().__init__()
-        self.embed = EmbeddingwithPositions(
+        self.embed = EmbeddingWithPositions(
             vocab_size=vocab_size,
             d_model=d_model,
             max_seq_len=max_seq_len,
@@ -67,31 +73,58 @@ class babyEmbedLM(nn.Module):
             emb_dropout=emb_dropout,
             scale_tokens=True,
         )
+        enc_layer = nn.TransformerEncoderLayer(
+            d_model=d_model,
+            nhead=n_head,
+            dim_feedforward=4 * d_model,
+            dropout=0.1,
+            batch_first=True,
+            norm_first=True,
+            activation="gelu",
+        )
+        self.encoder = nn.TransformerEncoder(enc_layer, num_layers=n_layer)
+        self.ln_f = nn.LayerNorm(d_model)
         self.lm_head = nn.Linear(d_model, vocab_size, bias=False)
-        
-    def forward(self, input_ids: torch.Tensor, attention_mask: Optional[torch.Tensor] = None):
-        _ = attention_mask
-        x = self.embed(input_ids) # (B, S, D)
-        logits = self.lm_head(x) # (B, S, V)
-        return logits
 
+        def _init_weights(m):
+            if isinstance(m, nn.Linear):
+                nn.init.xavier_uniform_(m.weight)
+                if m.bias is not None:
+                    nn.init.zeros_(m.bias)
+            elif isinstance(m, nn.Embedding):
+                nn.init.normal_(m.weight, mean=0.0, std=0.02)
 
+        self.apply(_init_weights)
+        # weight tying
+        self.lm_head.weight = self.embed.tok.embedding.weight
+
+    def forward(self, input_ids: torch.Tensor, attention_mask: Optional[torch.Tensor] = None) -> torch.Tensor:
+        # (B,S,D)
+        x = self.embed(input_ids)
+        S = x.size(1)
+
+        causal: torch.Tensor = torch.triu(
+            torch.ones((S, S), dtype=torch.bool, device=x.device), diagonal=1
+        )
+        key_pad = (attention_mask == 0) if attention_mask is not None else None
+
+        x = self.encoder(x, mask=causal, src_key_padding_mask=key_pad)
+        x = self.ln_f(x)
+        return self.lm_head(x)
 
 def get_best_model_definition(
-        vocab_size: int, 
-        d_model: int = 256, 
-        max_seq_len: int = 512, 
-        padding_idx: Optional[int] = None, 
-        emb_dropout: float = 0.1,
+    vocab_size: int,
+    d_model: int = 384,
+    max_seq_len: int = 512,
+    padding_idx: Optional[int] = None,
+    emb_dropout: float = 0.1,
 ) -> nn.Module:
-    """
-    This is the model that will be used in the evaluation script
-    Ensure it matches the .pt file provided there
-    """
-    return babyEmbedLM(
+    return TinyTransformerLM(
         vocab_size=vocab_size,
         d_model=d_model,
         max_seq_len=max_seq_len,
+        n_layer=4,
+        n_head=6,
         padding_idx=padding_idx,
         emb_dropout=emb_dropout,
     )

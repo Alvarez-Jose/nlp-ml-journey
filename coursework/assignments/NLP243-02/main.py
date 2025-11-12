@@ -25,7 +25,7 @@ def main():
         train_loader=dataloaders["train"],
         valid_loader=dataloaders["val"],
         pad_token_id=pad_token_id,
-        num_epochs=5,
+        num_epochs=10,
         device=device,
         save_path="best_model.pt"
     )

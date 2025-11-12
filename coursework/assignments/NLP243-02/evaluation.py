@@ -20,66 +20,57 @@ def evaluate_perplexity(model, dataloader):
     model.eval()
     device = get_model_device(model)
 
-    loss_fn = nn.CrossEntropyLoss(reduction='sum', ignore_index=-100)
-    total_loss = 0.0
-    total_tokens = 0
+    IGNORE = -100
+    loss_fn_sum = nn.CrossEntropyLoss(reduction="sum", ignore_index=IGNORE)
 
-    for batch in dataloader:
-        # move tensors to GPU if available
-        input_ids = batch['input_ids'].to(device, non_blocking=True)
-        padding_mask = batch['attention_mask'].to(device, non_blocking=True)
+    total_loss, total_tokens = 0.0, 0
+    with torch.no_grad():
+        for batch in dataloader:
+            input_ids: Tensor = batch["input_ids"].to(device)
+            attention_mask: Tensor = batch["attention_mask"].to(device)
 
-        # shift input and targets
-        targets = input_ids[:, 1:]
-        inputs = input_ids[:, :-1]
-        target_padding_mask = padding_mask[:, 1:]
-        input_padding_mask  = padding_mask[:, :-1]
+            inputs = input_ids[:, :-1]
+            targets = input_ids[:, 1:]
+            tgt_mask = attention_mask[:, 1:]  # 1=real, 0=pad
+            targets = targets.masked_fill(tgt_mask == 0, IGNORE)
 
-        # ignore padding in loss
-        targets = targets.masked_fill(target_padding_mask == 0, -100).view(-1)
+            logits = model(inputs, attention_mask=attention_mask[:, :-1])  # (B,S-1,V)
+            V = logits.size(-1)
 
-        # AMP (works even if CPU; no device_type arg needed)
-        with autocast(enabled=(device.type == "cuda")):
-            logits = model(inputs, input_padding_mask)  # (B, S, V)
+            loss_sum = loss_fn_sum(
+                logits.reshape(-1, V),
+                targets.reshape(-1),
+            )
 
-        B, S, V = logits.shape
-        logits = logits.view(-1, V)
+            total_loss += float(loss_sum.item())
+            total_tokens += int((targets != IGNORE).sum().item())
 
-        total_loss += loss_fn(logits, targets).item()
-        total_tokens += target_padding_mask.sum().item()
-
-    perplexity = math.exp(total_loss / max(total_tokens, 1))
-    return perplexity, total_loss
-
+    avg_loss = total_loss / max(total_tokens, 1)
+    ppl = math.exp(avg_loss) if avg_loss < 100 else float("inf")
+    return ppl, avg_loss
 
 def parse_arguments():
-    """
-    Parse command line arguments for model evaluation.
-    """
-    parser = argparse.ArgumentParser(description="Evaluate a trained transformer model")
-    parser.add_argument('--model_path', default='./best_model.pt', help='Path to the trained model file')
-    parser.add_argument('--batch_size', type=int, default=64, help='Batch size for evaluation')
+    parser = argparse.ArgumentParser(description="Evaluate a trained transformer LM")
+    parser.add_argument("--model_path", default="./best_model.pt", help="Path to state_dict .pt")
+    parser.add_argument("--batch_size", type=int, default=64, help="Eval batch size")
     return parser.parse_args()
 
 
 def main():
     args = parse_arguments()
-
     tokenized = GPTTokenizedData(args.batch_size)
     dataloaders = tokenized.dataloaders
-
     vocab_size = tokenized.vocab_size
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-    model = get_best_model_definition(vocab_size).to(device)
-
-    # load model weights directly to the correct device
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    model = get_best_model_definition(vocab_size)
     state = torch.load(args.model_path, map_location=device)
-    model.load_state_dict(state)
+    if isinstance(state, dict):
+        model.load_state_dict(state, strict=True)
+    model.to(device)
 
-    ppl, loss = evaluate_perplexity(model, dataloaders['test'])
-    print(f"Perplexity: {ppl:.4f}, Total loss: {loss:.4f}")
-
+    ppl, avg_loss = evaluate_perplexity(model, dataloaders["test"])
+    print(f"Test Perplexity: {ppl:.4f} | Avg NLL: {avg_loss:.6f}")
 
 if __name__ == "__main__":
     main()

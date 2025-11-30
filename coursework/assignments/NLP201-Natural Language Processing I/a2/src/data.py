@@ -1,7 +1,9 @@
 import os
 from collections import Counter
 
-DATA_DIR = "/Users/antonioalvarezmaciel/Desktop/nlp-ml-journey/coursework/assignments/NLP201-Natural Language Processing I/a2/A2-Data 2"
+DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "A2-Data 2")
+
+
 
 FILE_NAMES = {
     "train": "1b_benchmark.train.tokens",
@@ -62,10 +64,11 @@ class SimpleTokenizer:
         self.vocab = vocab
 
     def preprocess_train(self, sentences):
+        assert self.freq is not None
         processed = []
         for line in sentences:
             tokens = self.tokenize(line)
-            new_tokens = ["<START>", "<START"]
+            new_tokens = ["<START>", "<START>"]
             for tok in tokens:
                 if self.freq[tok] < self.min_freq:
                     new_tokens.append("<UNK>")
@@ -77,10 +80,11 @@ class SimpleTokenizer:
         return processed
 
     def preprocess_other(self, sentences):
+        assert self.vocab is not None
         processed = []
         for line in sentences:
             tokens = self.tokenize(line)
-            new_tokens = ["<START>", "<START"]
+            new_tokens = ["<START>", "<START>"]
             for tok in tokens:
                 if tok in self.vocab:
                     new_tokens.append(tok)
@@ -90,4 +94,6 @@ class SimpleTokenizer:
             processed.append(new_tokens)
 
         return processed
+
+
 

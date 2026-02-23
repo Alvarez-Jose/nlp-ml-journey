@@ -13,15 +13,16 @@ def get_token_tag_tuples(sent):
 def get_tagged_sentences(text):
     sentences = []
 
-    blocks = text.split("======================================")
+    blocks = text.split("=================================")
     for block in blocks:
         sents = block.split("\n\n")
         for sent in sents:
-            sent = sent.replace("\n", "").replace("[", "").replace("]", "")
-        if sent:
-            sentences.append(sent)
+            sent = sent.replace("\n", "").replace("[", "").replace("]", "").strip()
+            if sent:
+                sentences.append(sent)
 
     return sentences
+
 
 def load_treebank_splits(datadir):
 
@@ -55,7 +56,7 @@ def load_treebank_splits(datadir):
 def main():
 
     # Set path for datadir
-    datadir = os.path.join("data", "penn-treeban3-wsj", "wsj")
+    datadir = os.path.join("data", "penn-treebank3-wsj", "wsj")
 
 
     train, dev, test = load_treebank_splits(datadir)

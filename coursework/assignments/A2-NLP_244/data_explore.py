@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 # Load data
 train_df = pd.read_json("train.json")
-val_df = pd.read_json("validation.json")
+val_df = pd.read_json("val.json")
 
 with open('file_contents.json', 'r') as f:
     file_contents = json.load(f)

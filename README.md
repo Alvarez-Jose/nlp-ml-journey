@@ -1,41 +1,53 @@
-# 🧠 NLP & ML Journey Portfolio
+<!--
+  STARTER README for github.com/Alvarez-Jose/nlp-ml-journey
+  This repo currently has no description; this draft frames it as a learning log.
+  Personalize the bracketed sections, then drop into the repo as README.md.
+-->
 
-Welcome! I'm Jose Alvarez, a Senior Associate Lead and Full-Stack Developer at Peraton, working on mission-critical systems for national security. This repository tracks my transition into the world of AI, Machine Learning, and especially Natural Language Processing (NLP).
+# nlp-ml-journey
 
-## 🚀 Mission
+> A curated learning log of NLP / ML notebooks built during my M.S. coursework at UC Santa Cruz. Each notebook is self-contained and reproduces a concept end-to-end — from data prep through evaluation — with notes on what worked, what didn't, and what surprised me.
 
-To become an AI/ML Engineer with a specialization in NLP by combining my strong software engineering foundation with advanced learning, hands-on experimentation, and real-world impact.
+![Python](https://img.shields.io/badge/Python-3.10-blue?logo=python&logoColor=white)
+![PyTorch](https://img.shields.io/badge/PyTorch-2.x-EE4C2C?logo=pytorch&logoColor=white)
+![HuggingFace](https://img.shields.io/badge/HuggingFace-Transformers-FFD21E?logo=huggingface&logoColor=black)
+![Jupyter](https://img.shields.io/badge/Jupyter-Notebooks-orange?logo=jupyter&logoColor=white)
 
-## 👨‍💻 About Me
+## Why this exists
 
-- 🎓 B.S. in Computer Science, Software Engineering Concentration (CSU Monterey Bay)
-- 🎓 Incoming M.S. student in Natural Language Processing at UC Santa Cruz (Fall 2025)
-- 🔐 Active DoD Secret Clearance + Security+
-- 🛠️ Experienced in Angular, Java, TypeScript, C++, Spring Boot, and secure systems
-- 💬 Passionate about building scalable software and solving hard problems in NLP
+Coursework notebooks tend to rot. This repo is the opposite — a small, well-organized set of notebooks I keep coming back to as references when I'm starting a new model or pipeline.
 
-## 👨‍🎓 Current Focus
+## Notebooks
 
-Starting Fall 2025, I will begin my Master’s in NLP at UCSC and leave my full-time job to focus fully on school and career development in AI/ML. This repository will grow with academic projects, research experiments, and production-grade applications.
+<!-- Replace the rows below with the actual notebooks in your repo. -->
 
-## 📂 Repo Structure
+| Notebook | Topic | Key takeaways |
+|---|---|---|
+| `01_text_classification_baseline.ipynb` | TF-IDF + logistic regression on [REPLACE: dataset] | Strong baseline; rank-based thresholding for multilabel |
+| `02_finetuning_transformers.ipynb` | Fine-tuning BERT / DeBERTa for sequence classification | Layer-wise learning rate decay, gradient accumulation |
+| `03_retrieval_basics.ipynb` | BM25 vs. dense retrieval | When sparse beats dense, and why hybrid wins |
+| `04_[REPLACE]` | [REPLACE] | [REPLACE] |
 
-- **preparation/**: Notes and learning from Coursera, books, and papers
-- **experiments/**: Exploratory notebooks (sentiment analysis, topic modeling, etc.)
-- **coursework/**: Assignments and class projects from NLP graduate courses
-- **showcase/**: Portfolio-ready projects built for recruiters and impact
-- **utils/**: Reusable scripts, data cleaners, and notebooks
+## Setup
 
-## 🗺️ Roadmap
+```bash
+git clone https://github.com/Alvarez-Jose/nlp-ml-journey
+cd nlp-ml-journey
+pip install -r requirements.txt
+jupyter lab
+```
 
-See [roadmap.md](./roadmap.md) for my learning plan, progress, and upcoming goals.
+## What's intentionally not here
 
-## 🔗 Connect with Me
+- Production code (live in their own project repos)
+- Coursework solutions for currently-running classes (academic integrity)
+- Anything proprietary from research or industry work
 
-- 💼 [LinkedIn](https://linkedin.com/in/jose-alvarez-developer)
-- 💻 [GitHub](https://github.com/Alvarez-Jose)
-- 📄 [Resume (PDF)](./Jose_Antonio_Alvarez_Maciel_Resume_2025.pdf)
+## Related
+
+- [REPLACE: link to your DeBERTa multilabel pipeline repo when it's up]
+- [REPLACE: link to your RAG repo when it's up]
 
 ---
 
-_This repository evolves as I learn — check back for updates and new projects!_
+**Author:** Antonio Alvarez Maciel · M.S. NLP, UC Santa Cruz · [LinkedIn](https://linkedin.com/in/jose-alvarez-maciel)
